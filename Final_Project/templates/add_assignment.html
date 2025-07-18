@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Assignments
+{% endblock %}
+
+{% block main %}
+    <!-- Utilized ChatGPT to help print the messages onto the screen -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <header>
+                    <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </header>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h1 class="text-center fs-1 align-middle">Add Assignment</h1>
+    <div class="row justify-content-evenly">
+        <div class="col-4">
+            <form action="/add_assignment" method="post">
+                <div class="card border border-black mb-0" style="height: 50%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center;">Class of Assignment</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="class_of_assignment" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value=""style="background-color: white; color: black;">Class</option>
+                                    {% for room in classes %}
+                                        <option class="dropdown-item" style="background-color: white; color: black;" value="{{ room }}">{{ room }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <h4 class="card-title" style="text-align: center">Name of Assignment</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="assignment_name" placeholder="Name" type="text">
+                        </div>
+                        <br/>
+
+                        <h4 class="card-title" style="text-align: center">Online or Paper Assignment?</h4>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="type" id="online" value="Online">
+                            <label class="form-check-label" for="online">Online</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="type" id="paper" value="Paper">
+                            <label class="form-check-label" for="paper">Paper</label>
+                        </div>
+                        <br/>
+                        <br/>
+
+                        <div class="mb-3">
+                            <h4 class="card-title" style="text-align: center">Link of Assignment (If there is one)</h4>
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="link" placeholder="Link" type="url">
+                        </div>
+                        <br/>
+
+                        <div class="mb-3">
+                            <h4 class="card-title" style="text-align: center">When is the Assignment Due?</h4>
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="date" placeholder="Due Date" type="date">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="time" placeholder="Time" type="time">
+                        </div>
+                        <br/>
+
+                        <button class="btn btn-primary w-100" type="submit">ADD ASSIGNMENT</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-4 align-self-center">
+            <img src="https://cdn1.iconfinder.com/data/icons/back-to-school-219/64/homework_online_assignment_assignment_online_homework_research-512.png" alt="HW Icon" style="height: 600px;">
+        </div>
+    </div>
+    <br/>
+    <br/>
+
+{% endblock %}

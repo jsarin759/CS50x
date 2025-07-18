@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Forgot Password
+{% endblock %}
+
+{% block main %}
+    <div class="row justify-content-evenly">
+        <div class="col-4 align-self-center">
+            <img src="https://cdn1.iconfinder.com/data/icons/layout-3-3/48/125-512.png" alt="forgetting_password" style="height: 500px;">
+        </div>
+        <div class="col-4">
+            <form action="/forgot_pass" method="post">
+                <h1 class="text-center fs-1 align-middle">Trackify</h1>
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body" style="justify-content: center">
+                        <h4 class="card-title" style="text-align: center">Forgot Password?</h4>
+                        <p class="card-text" style="text-align: center">Please enter a new password you would like to set.</p>
+                        <!-- Utilized ChatGPT to help print the messages onto the screen -->
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <header>
+                                        <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                                            <strong>{{ message }}</strong>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </header>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <br/>
+                        <br/>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="username" placeholder="Username" type="text">
+                        </div>
+                        <br/>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-100" name="new_password" id="pass_for_forgot" placeholder="New password" type="password">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="show_pass3" id="show_pass_for_forgot" value="Show Password">
+                                <label class="form-check-label" for="show_pass_for_forgot">Show Password</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-100" name="confirmation" id="confirm_for_forgot" placeholder="Retype Password" type="password">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="confirm_message2" id="show_confirm_for_forgot" value="Show Password">
+                                <label class="form-check-label" for="show_confirm_for_forgot">Show Password</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">SIGN UP</button>
+                        <br/>
+                        <br/>
+                        <p style="text-align: center">Already have an account, <a class="nav-link link-primary" href="/login">Login</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        let checkbox_for_pass = document.getElementById('show_pass_for_forgot');
+        let password1 = document.getElementById('pass_for_forgot');
+        checkbox_for_pass.addEventListener('click', function() {
+            if (password1.type == 'password')
+            {
+                password1.type = 'text';
+            }
+            else
+            {
+                password1.type = 'password';
+            }
+        });
+
+        let checkbox_for_confirm = document.getElementById('show_confirm_for_forgot');
+        let password2 = document.getElementById('confirm_for_forgot');
+        checkbox_for_confirm.addEventListener('click', function() {
+            if (password2.type == 'password')
+            {
+                password2.type = 'text';
+            }
+            else
+            {
+                password2.type = 'password';
+            }
+        });
+    </script>
+{% endblock %}

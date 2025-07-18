@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Review
+{% endblock %}
+
+{% block main %}
+    <!-- Utilized ChatGPT to help print the messages onto the screen -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <header>
+                    <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </header>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row justify-content-evenly">
+        <div class="col-4 align-self-center">
+            <img src="https://static.vecteezy.com/system/resources/previews/014/982/252/non_2x/write-online-review-icon-outline-report-client-vector.jpg" alt="reviewing" style="height: 500px">
+        </div>
+        <div class="col-4">
+            <form action="/review" method="post">
+                <h1 class="text-center fs-1 align-middle">Leave a Review!</h1>
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center;">Enter how you rate it out of five!</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control" style="width: 15%; display: inline; margin-right: 5px" name="rating" type="number" min="0" max="5" step="0.5">/5
+                        </div>
+                        <h4 class="card-title" style="text-align: center;">Enter a Title for your Review</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="title" type="text">
+                        </div>
+                        <textarea autocomplete="off" autofocus class="form-control mx-auto w-100" name="review" rows="10" cols="50" placeholder="Enter your Review"></textarea>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">LEAVE A REVIEW</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

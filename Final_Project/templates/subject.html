@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Subjects
+{% endblock %}
+
+{% block main %}
+    <!-- Utilized ChatGPT to help print the messages onto the screen -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <header>
+                    <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </header>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row">
+        <div class="col-4">
+            <form action="/subject" method="post">
+                <h1 class="text-center fs-1 align-middle">Add Subject</h1>
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center">Name of Subject</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="subject" placeholder="Subject" type="text">
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">ADD SUBJECT</button>
+                    </div>
+                </div>
+            </form>
+            <img src="https://static.vecteezy.com/system/resources/previews/017/588/325/non_2x/physical-subjects-graduation-icon-outline-illustration-vector.jpg" alt="Subjects" style="align-items: center; height: 400px;">
+        </div>
+        <div class="col-4">
+            <form action="/edit_subject" method="post">
+                <h1 class="text-center fs-1 align-middle">Edit Subject</h1>
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center">Name of Subject</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="subject_name" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value="" style="background-color: white; color: black;">Subject</option>
+                                    {% for subject in subjects %}
+                                        <option class="dropdown-item" value="{{ subject }}" style="background-color: white; color: black;">{{ subject }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center">Enter the New Name for the Subject</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="new_subject_name" placeholder="Name" type="text">
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">EDIT SUBJECT</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-4">
+            <form action="/remove_subject" method="post">
+                <h1 class="text-center fs-1 align-middle">Remove Subject</h1>
+                <div class="card border border-black" style="height: 50%; margin-bottom: 5%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center;">Select the Subject You Want to Remove</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="subject_name" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value="" style="background-color: white; color: black;">Subject</option>
+                                    {% for subject in subjects %}
+                                        <option class="dropdown-item" value="{{ subject }}" style="background-color: white; color: black;">{{ subject }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">REMOVE SUBJECT</button>
+                    </div>
+                </div>
+            </form>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMqWel2_ffDbAuJexW8TCUnHPAE1nIhTHwQB_lctok1tWnUzQq8AEspVeKl5E3ic8PPwQ&usqp=CAU" alt="Subject2" style="align-items: center; height: 300px;">
+        </div>
+    </div>
+
+{% endblock %}

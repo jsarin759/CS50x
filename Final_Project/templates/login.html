@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main %}
+    <div class="row justify-content-evenly">
+        <div class="col-4">
+            <form action="/login" method="post">
+                <h1 class="text-center fs-1 align-middle">Trackify</h1>
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center">Login</h4>
+                        <!-- Utilized ChatGPT to help print the messages onto the screen -->
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <header>
+                                        <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                                            <strong>{{ message }}</strong>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </header>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <br/>
+                        <br/>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="username" placeholder="Username" type="text">
+                        </div>
+                        <br/>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-100" name="password" id="enter_pass_for_login" placeholder="Password" type="password">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="show_pass" id="show_pass" value="Show Password">
+                                <label class="form-check-label" for="show_pass">Show Password</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">LOGIN</button>
+                        <a class="nav-link link-primary" style="text-align: center" href="/forgot_pass">Forgot Password?</a>
+                        <br/>
+                        <p style="text-align: center">New to Trackify, <a class="nav-link link-primary" href="/register">Sign Up</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-4 align-self-center">
+            <img src="https://cdn-icons-png.flaticon.com/512/20/20079.png" alt="man_login" style="height: 400px">
+        </div>
+    </div>
+
+
+    <script>
+        let checkbox = document.getElementById('show_pass');
+        let password = document.getElementById('enter_pass_for_login');
+        checkbox.addEventListener('click', function() {
+            if (password.type == 'password')
+            {
+                password.type = 'text';
+            }
+            else
+            {
+                password.type = 'password';
+            }
+        });
+    </script>
+{% endblock %}

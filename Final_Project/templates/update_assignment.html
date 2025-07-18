@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Assignments
+{% endblock %}
+
+{% block main %}
+    <!-- Utilized ChatGPT to help print the messages onto the screen -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <header>
+                    <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </header>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h1 class="text-center fs-1 align-middle">Update Assignment</h1>
+    <p class="text-center fs-5 align-middle">Here, you can adjust characteristics of any assignment depicted on the home screen.</p>
+    <p class="text-center fs-5 align-middle">If you don't have to make adjustments to any of the fields, please leave them blank (except the first prompt).</p>
+
+    <div class="row justify-content-evenly">
+        <div class="col-4 align-self-start">
+            <div class="align-self-start">
+                <img src="https://static.vecteezy.com/system/resources/previews/015/603/562/non_2x/assignment-time-icon-outline-style-vector.jpg" alt="HW Icon" style="height: 400px">
+            </div>
+            <div class="align-self-end">
+                <img src="https://static.vecteezy.com/system/resources/previews/015/603/569/non_2x/assignment-pen-icon-outline-style-vector.jpg" alt="HW Icon2" style="height: 500px">
+            </div>
+        </div>
+
+        <div class="col-4">
+            <form action="/update_assignment" method="post">
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center">Name of Assignment</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="name_of_assignment" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value=""style="background-color: white; color: black;">Assignment Name</option>
+                                    {% for assignment in assignments %}
+                                        <option class="dropdown-item" style="background-color: white; color: black;" value="{{ assignment }}">{{ assignment }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center;">Class for Updated Assignment</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="new_assignment_class" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value=""style="background-color: white; color: black;">Class</option>
+                                    {% for room in classes %}
+                                        <option class="dropdown-item" style="background-color: white; color: black;" value="{{ room }}">{{ room }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center">Updated Name of Assignment (if necessary).</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="new_assignment_name" placeholder="Name" type="text">
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center">Switch Type of Assignment?</h4>
+                        <p class="fs-6">Don't answer the question if you don't want to switch the type.</p>
+                        <p class="fs-6"></p>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="type_switch" id="yes" value="Yes">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="mb-3">
+                            <h4 class="card-title" style="text-align: center">Provide the New Link (if necessary).</h4>
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="link_switch" placeholder="Link" type="url">
+                        </div>
+                        <br/>
+                        <div class="mb-3">
+                            <h4 class="card-title" style="text-align: center">When is the Assignment Due Now (if necessary)?</h4>
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="date_switch" placeholder="Due Date" type="date">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="time_switch" placeholder="Time" type="time">
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">UPDATE ASSIGNMENT</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+
+{% endblock %}

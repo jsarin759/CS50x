@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class="row justify-content-evenly">
+        <div class="col-4">
+            <form action="/register" method="post">
+                <h1 class="text-center fs-1 align-middle">Trackify</h1>
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body" style="justify-content: center">
+                        <h4 class="card-title" style="text-align: center">Sign Up</h4>
+                        <!-- Utilized ChatGPT to help print the messages onto the screen -->
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <header>
+                                        <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                                            <strong>{{ message }}</strong>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </header>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <br/>
+                        <br/>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="username" placeholder="Username" type="text">
+                        </div>
+                        <br/>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-100" name="password" id="pass_for_register" placeholder="Password" type="password">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="show_pass1" id="show_pass_for_register" value="Show Password">
+                                <label class="form-check-label" for="show_pass_for_register">Show Password</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-100" name="confirmation" id="confirm_for_register" placeholder="Retype Password" type="password">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="show_pass2" id="show_confirm_for_register" value="Show Password">
+                                <label class="form-check-label" for="show_confirm_for_register">Show Password</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">SIGN UP</button>
+                        <br/>
+                        <br/>
+                        <p style="text-align: center">Already have an account, <a class="nav-link link-primary" href="/login">Login</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-4 align-self-center">
+            <img src="https://img.freepik.com/premium-vector/sign-new-laptop-icon-outline-vector-user-best-registration_98396-73212.jpg" alt="registering" style="height: 600px;">
+        </div>
+    </div>
+    <script>
+        let checkbox_for_pass = document.getElementById('show_pass_for_register');
+        let password1 = document.getElementById('pass_for_register');
+        checkbox_for_pass.addEventListener('click', function() {
+            if (password1.type == 'password')
+            {
+                password1.type = 'text';
+            }
+            else
+            {
+                password1.type = 'password';
+            }
+        });
+
+        let checkbox_for_confirm = document.getElementById('show_confirm_for_register');
+        let password2 = document.getElementById('confirm_for_register');
+        checkbox_for_confirm.addEventListener('click', function() {
+            if (password2.type == 'password')
+            {
+                password2.type = 'text';
+            }
+            else
+            {
+                password2.type = 'password';
+            }
+        });
+    </script>
+{% endblock %}

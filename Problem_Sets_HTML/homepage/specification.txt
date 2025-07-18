@@ -1,0 +1,23 @@
+HTML Tags
+1. <div>
+2. <ul>
+3. <li>
+4. <img>
+5. <a>
+6. <p>
+7. <table>
+8. <iframe>
+9. <form>
+10. <button>
+
+CSS properties
+1. background-color
+2. justify-content
+3. font-size
+4. padding-left
+5. text-align
+
+Javascript/Bootstrap
+I used javascript to make an alert that says hi to the user, to allow the user to change the background color for
+the body and header, to have the user answer a short quiz, to make a calculator, and to make a guessing number game
+for the user to play. I used Bootstrap for the header on each of the four pages.

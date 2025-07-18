@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block main %}
+    <!-- Utilized ChatGPT to help print the messages onto the screen -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <header>
+                    <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </header>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if length > 0 %}
+        <h1>Assignment Tracker</h1>
+        <table class="table table-hover w-100">
+            <thead class="table-primary">
+                <tr>
+                    <th class="text-start fs-4">#</th>
+                    <th class="text-start fs-4">Assignment Name</th>
+                    <th class="text-start fs-4">Type</th>
+                    <th class="fs-4">Class</th>
+                    <th class="fs-4">Subject</th>
+                    <th class="fs-4">Status</th>
+                    <th class="fs-4">Due Date</th>
+                    <th class="fs-4">Due Time</th>
+                    <th class="fs-4" style="width: 20%">Time Left</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments %}
+                    <tr id="{{ assignment.name }}">
+                        <td class="text-start fs-4">{{ assignment.row_num }}.</td>
+                        <td class="text-start fs-4">
+                            {% if assignment.link %}
+                                <a class="text-black link-dark link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ assignment.link }}" target="_blank">{{ assignment.name }}</a>
+                            {% else %}
+                                {{ assignment.name }}
+                            {% endif %}
+                        </td>
+                        <td class="text-start fs-4">{{ assignment.type }}</td>
+                        <td class="fs-4">{{ assignment.class }}</td>
+                        <td class="fs-4">{{ assignment.subject }}</td>
+                        <td class="fs-4">
+                            <div class="dropdown">
+                                <select id="dropdown{{ assignment.row_num }}" name="status" class="btn btn-primary btn-sm dropdown-toggle">
+                                    <option disabled selected value="Status" style="background-color: white; color: black;">Status</option>
+                                    <option value="Not Started" style="background-color: white; color: black;">Not Started</option>
+                                    <option value="In Progress" style="background-color: white; color: black;">In Progress</option>
+                                    <option value="Completed" style="background-color: white; color: black;">Completed</option>
+                                    <option value="Submitted" style="background-color: white; color: black;">Submitted</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="fs-4">{{ assignment.due_date }}</td>
+                        {% set hour = assignment.due_time[:2] | int %}
+                        {% set minute = assignment.due_time[3:5] | int %}
+                        <td class="fs-4">
+                            {% if minute >= 10 %}
+                                {% if hour > 12 %}{{ hour - 12 }}:{{ minute }} PM
+                                {% elif hour < 12 %}
+                                    {% if hour != 0 %}{{ hour }}:{{ minute }} AM
+                                    {% else %}12:{{ minute }} AM
+                                    {% endif %}
+                                {% else %}12:{{ minute }} PM
+                                {% endif %}
+                            {% else %}
+                                {% if hour > 12 %}{{ hour - 12 }}:0{{ minute }} PM
+                                {% elif hour < 12 %}
+                                    {% if hour != 0 %}{{ hour }}:0{{ minute }} AM
+                                    {% else %}12:0{{ minute }} AM
+                                    {% endif %}
+                                {% else %}12:0{{ minute }} PM
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td class="fs-4" id="{{ assignment.id }}"></td>
+                    </tr>
+                    <script>
+                        if (localStorage.getItem('dropdownValue{{ assignment.row_num }}') && localStorage.getItem('dropdownValue{{ assignment.row_num }}') != 'Submitted') {
+                            let dropdown = document.getElementById('dropdown{{ assignment.row_num }}') // Says submitted if row repeats
+                            dropdown.value = localStorage.getItem('dropdownValue{{ assignment.row_num }}');
+                            if (dropdown.value == 'Not Started')
+                            {
+                                document.getElementById('{{ assignment.name }}').classList.add('table-danger');
+                            }
+                            else if (dropdown.value == 'In Progress')
+                            {
+                                document.getElementById('{{ assignment.name }}').classList.add('table-warning');
+                            }
+                            else if (dropdown.value == 'Completed')
+                            {
+                                document.getElementById('{{ assignment.name }}').classList.add('table-success');
+                            }
+                        }
+
+                        document.getElementById('dropdown{{ assignment.row_num }}').addEventListener('change', function() {
+                            let dropdown = document.getElementById('dropdown{{ assignment.row_num }}');
+                            document.getElementById('{{ assignment.name }}').removeAttribute("class");
+                            if (dropdown.value == 'Not Started')
+                            {
+                                document.getElementById('{{ assignment.name }}').classList.add('table-danger');
+                            }
+                            else if (dropdown.value == 'In Progress')
+                            {
+                                document.getElementById('{{ assignment.name }}').classList.add('table-warning');
+                            }
+                            else if (dropdown.value == 'Completed' || dropdown.value == 'Submitted')
+                            {
+                                document.getElementById('{{ assignment.name }}').classList.add('table-success');
+                            }
+                            localStorage.setItem('dropdownValue{{ assignment.row_num }}', dropdown.value)
+
+                            fetch("/update_status", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    name: '{{ assignment.name }}',
+                                    statusTXT: `${dropdown.value}`
+                                })
+                            })
+                                .then(res => res.json())
+                        });
+
+                        // Utilized ChatGPT to display a live countdown
+                        startCountdown({{ assignment.remaining_time }}, {{ assignment.id }});
+                    </script>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h1>Well Done!</h1>
+        <img src="https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L2pvYjY4Ni0yNTMtdi5qcGc.jpg" alt="Sleeping Animal" width="40%">
+        <p class="fs-1">You have no assignments!</p>
+        <p class="fs-4">Time to recharge, take a break, watch your favorite movie, hang out with friends, or do whatever you want!</p>
+        <p class="fs-1">You've earned it!</p>
+    {% endif %}
+{% endblock %}

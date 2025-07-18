@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Classes
+{% endblock %}
+
+{% block main %}
+    <!-- Utilized ChatGPT to help print the messages onto the screen -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <header>
+                    <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </header>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row">
+        <div class="col-4">
+            <form action="/class" method="post">
+                <h1 class="text-center fs-1 align-middle">Add Class</h1>
+                <div class="card border border-black" style="height: 50%; margin-bottom: 5%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center;">Subject of Class</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="subject_of_class" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value="" style="background-color: white; color: black;">Subject</option>
+                                    {% for subject in subjects %}
+                                        <option class="dropdown-item" value="{{ subject }}" style="background-color: white; color: black;">{{ subject }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center">Name of Class</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="class" placeholder="Class" type="text">
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center">When is the last day of that class?</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="last_day" placeholder="Date of Last Day" type="date">
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">ADD CLASS</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-4">
+            <form action="/edit_class" method="post">
+                <h1 class="text-center fs-1 align-middle">Edit Class</h1>
+                <div class="card border border-black" style="height: 50%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center;">Name of Class</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="class_name" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value=""style="background-color: white; color: black;">Class</option>
+                                    {% for room in classes %}
+                                        <option class="dropdown-item" style="background-color: white; color: black;" value="{{ room }}">{{ room }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center;">New Subject of Class</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="new_subject_for_class" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value="" style="background-color: white; color: black;">Subject</option>
+                                    {% for subject in subjects %}
+                                        <option class="dropdown-item" value="{{ subject }}" style="background-color: white; color: black;">{{ subject }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center">New Name of Class</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="new_name" placeholder="Class" type="text">
+                        </div>
+                        <br/>
+                        <h4 class="card-title" style="text-align: center">When is the new last day of that class?</h4>
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-100" name="new_last_day" placeholder="Date of Last Day" type="date">
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">EDIT CLASS</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-4">
+            <form action="/remove_class" method="post">
+                <h1 class="text-center fs-1 align-middle">Remove Class</h1>
+                <div class="card border border-black" style="height: 50%; margin-bottom: 5%">
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center;">Select the Class You Want to Remove</h4>
+                        <div class="mb-3">
+                            <div class="dropdown">
+                                <select name="class_name" class="btn btn-primary dropdown-toggle">
+                                    <option disabled selected value="" style="background-color: white; color: black;">Class</option>
+                                    {% for room in classes %}
+                                        <option class="dropdown-item" value="{{ room }}" style="background-color: white; color: black;">{{ room }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary w-100" type="submit">REMOVE CLASS</button>
+                    </div>
+                </div>
+            </form>
+            <img src="https://images.vexels.com/media/users/3/153315/isolated/lists/dd8b8502e6409e786b8834945a34ccf9-school-books-stroke-icon.png" alt="Classes" style="align-items: center; height: 300px">
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Review
+{% endblock %}
+
+{% block main %}
+    <!-- Utilized ChatGPT to help print the messages onto the screen -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <header>
+                    <div class="alert alert-{{ category }} text-center alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </header>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+    <h1 class="text-center fs-1 align-middle">All Reviews</h1>
+    <p><b>{{ avg_rating }}</b></p>
+    {% if avg_rating % 1 == 0 %}
+        {% for i in range(avg_rating) %}
+            <svg width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="star" fill="orange" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+            </svg>
+        {% endfor %}
+        {% for i in range(5 - avg_rating) %}
+            <svg width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="star" fill="white" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+            </svg>
+        {% endfor %}
+    {% else %}
+        {% set round_down = avg_rating | int %}
+        {% for i in range(round_down) %}
+            <svg width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="star" fill="orange" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+            </svg>
+        {% endfor %}
+        <svg width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="vertGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="{{ (avg_rating - round_down) * 100 }}%" style="stop-color:orange;stop-opacity:1"/>
+                <stop offset="{{ (avg_rating - round_down) * 100 }}%" style="stop-color:white;stop-opacity:1"/>
+                </linearGradient>
+            </defs>
+            <polygon fill="url(#vertGradient)" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8" />
+        </svg>
+        {% for i in range(4 - round_down) %}
+            <svg width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="star" fill="white" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+            </svg>
+        {% endfor %}
+    {% endif %}
+
+    <br/>
+    <br/>
+
+    {% for review in reviews %}
+        <div class="d-flex justify-content-center">
+            <div class="card border border-black text-start" style="width: 100%; height: 50%; margin-bottom: 5%">
+                <div class="card-body">
+                    <h3>{{ review.title }}</h3>
+                    <p><b>by {{ review.name }}, written on {{ review.date_of_review }}</b></p>
+                    <div class="w-25">
+                        {% if review.stars % 1 == 0 %}
+                            {% for i in range(review.stars) %}
+                                <svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon class="star" fill="orange" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+                                </svg>
+                            {% endfor %}
+                            {% for i in range(5 - review.stars) %}
+                                <svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon class="star" fill="white" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+                                </svg>
+                            {% endfor %}
+                        {% else %}
+                            {% set round_down = review.stars | int %}
+                            {% for i in range(round_down) %}
+                                <svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon class="star" fill="orange" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+                                </svg>
+                            {% endfor %}
+                            <svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="halfGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="50%" style="stop-color:orange;stop-opacity:1"/>
+                                    <stop offset="50%" style="stop-color:white;stop-opacity:1"/>
+                                    </linearGradient>
+                                </defs>
+                                <polygon fill="url(#halfGradient)" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8" />
+                            </svg>
+                            {% for i in range(4 - round_down) %}
+                                <svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon class="star" fill="white" stroke="black" points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8"/>
+                                </svg>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <br/>
+                    <p>{{ review.description }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
